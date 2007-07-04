@@ -1007,6 +1007,8 @@ export M2_HOME=`pwd`/maven2/home/%{base_name}-%{version}
 # pushd maven2/ ...
 pushd %{name} >& /dev/null
 
+export JAVA_HOME=%{java_home}
+
 mkdir bootstrap/lib
 ln -s $(build-classpath jdom) bootstrap/lib/jdom.jar
 export CLASSPATH=`pwd`/bootstrap/lib/jdom.jar
