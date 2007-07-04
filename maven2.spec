@@ -1007,9 +1007,6 @@ export M2_HOME=`pwd`/maven2/home/%{base_name}-%{version}
 # pushd maven2/ ...
 pushd %{name} >& /dev/null
 
-[ -z "$JAVA_HOME" ] && JAVA_HOME=%{_jvmdir}/java
-export JAVA_HOME
-
 mkdir bootstrap/lib
 ln -s $(build-classpath jdom) bootstrap/lib/jdom.jar
 export CLASSPATH=`pwd`/bootstrap/lib/jdom.jar
@@ -1054,7 +1051,7 @@ popd >& /dev/null
 (cd maven2
 
 # One of the tests (#63) needs tools.jar. Fix the path for it
-sed -i -e s:"<systemPath>\${java.home}/../lib/tools.jar</systemPath>":"<systemPath>$JAVA_HOME/lib/tools.jar</systemPath>":g maven-core-it/it0063/pom.xml 
+sed -i -e s:"<systemPath>\${java.home}/../lib/tools.jar</systemPath>":"<systemPath>%{java_home}/lib/tools.jar</systemPath>":g maven-core-it/it0063/pom.xml 
 
 (cd integration-tests/maven-core-it-plugin
 $M2_HOME/bin/mvn -s %{maven_settings_file} $MAVEN_OPTS org.apache.maven.plugins:maven-plugin-plugin:2.1.1-SNAPSHOT:descriptor org.apache.maven.plugins:maven-resources-plugin:2.2-SNAPSHOT:resources org.apache.maven.plugins:maven-compiler-plugin:2.1-SNAPSHOT:compile org.apache.maven.plugins:maven-jar-plugin:2.1-SNAPSHOT:jar org.apache.maven.plugins:maven-install-plugin:2.2-SNAPSHOT:install
