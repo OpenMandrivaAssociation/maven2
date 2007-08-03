@@ -48,7 +48,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.2
+Release:        %mkrel 10.6.3
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
@@ -112,7 +112,6 @@ Patch8:          %{name}-noexternaljavadoclinks.patch
 Patch9:          %{name}-MANTTASKS-44.patch
 
 BuildRequires:    jpackage-utils >= 0:1.7.2
-BuildRequires:    /bin/ls,/usr/bin/head,/usr/bin/find,/usr/bin/awk,/bin/grep,/bin/sed
 
 BuildRequires:    ant >= 1.6.5
 BuildRequires:    antlr >= 2.7.4
