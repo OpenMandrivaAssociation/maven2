@@ -48,7 +48,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.3
+Release:        %mkrel 10.6.4
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
@@ -97,6 +97,9 @@ Source13:        %{name}-empty-dep.pom
 Source14:        %{name}-empty-dep.jar
 Source15:        %{name}-jpp-script
 Source16:        %{name}-jpp-readme.html
+
+# Based on http://maven.apache.org/guides/mini/guide-bash-m2-completion.html
+Source17:        %{name}-bash-completion
 
 Patch0:          maven2-disable-itests.patch
 Patch1:          maven2-addjdomtobootstrappath.patch
@@ -1304,6 +1307,10 @@ ln -sf %{_datadir}/%{name}/plugins $RPM_BUILD_ROOT%{_javadir}/%{name}
 # Create repository links
 ln -s %{_javadir} $RPM_BUILD_ROOT%{_datadir}/%{name}/repository/JPP
 
+# Install bash-completion support
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d
+%{__cp} -a %{SOURCE17} %{_sysconfdir}/bash_completion.d/%{name}
+
 %if %{gcj_support}
 %{_bindir}/aot-compile-rpm
 %endif
@@ -1885,6 +1892,7 @@ fi
 %dir %{_mavendepmapfragdir}
 %config(noreplace) %{_mavendepmapfragdir}/*
 %{_javadir}/%{name}
+%config(noreplace) %{_sysconfdir}/bash_completion.d/%{name}
 
 %if %{gcj_support}
 %dir %attr(-,root,root) %{_libdir}/gcj/%{name}
