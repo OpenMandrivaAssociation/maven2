@@ -49,12 +49,12 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.5
+Release:        %mkrel 10.6.6
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Java
-License:        Apache License
+License:        Apache Software License
 URL:            http://maven.apache.org/
 
 # svn export http://svn.apache.org/repos/asf/maven/components/tags/maven-2.0.4 maven2
