@@ -34,6 +34,7 @@
 %define with_itests %{!?_with_itests:0}%{?_with_itests:1}
 %define without_itests %{?_with_itests:0}%{!?_with_itests:1}
 
+%define _with_bootstrap 1
 %define with_bootstrap %{!?_with_bootstrap:0}%{?_with_bootstrap:1}
 %define without_bootstrap %{?_with_bootstrap:0}%{!?_with_bootstrap:1}
 
@@ -48,7 +49,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.4
+Release:        %mkrel 10.6.5
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
@@ -110,9 +111,7 @@ Patch5:          %{name}-buildallplugins.patch
 Patch6:          %{name}-enable-unbuilt-modules.patch
 Patch7:          %{name}-fastjar-manifest-fix.patch
 Patch8:          %{name}-noexternaljavadoclinks.patch 
-
-# http://jira.codehaus.org/browse/MANTTASKS-44
-Patch9:          %{name}-MANTTASKS-44.patch
+Patch9:          %{name}-ant17.patch
 
 BuildRequires:    jpackage-utils >= 0:1.7.2
 
@@ -266,9 +265,9 @@ Requires:        modello-maven-plugin >= 1.0-0.a8.3
 %endif
 
 Requires(post):    jpackage-utils >= 0:1.7.2
-Requires(postun):  jpackage-utils >= 0:1.7.2, /bin/rmdir
+Requires(postun):  jpackage-utils >= 0:1.7.2
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %if ! %{gcj_support}
 BuildArch:      noarch
@@ -278,6 +277,7 @@ BuildArch:      noarch
 BuildRequires:       java-gcj-compat-devel
 Requires(post):      java-gcj-compat
 Requires(postun):    java-gcj-compat
+ExcludeArch:         ppc64
 %endif
 
 %description
@@ -925,8 +925,7 @@ done
 %patch6 -b .sav
 %patch7 -b .sav
 %patch8 -b .sav
-
-%patch9 -b .ant
+%patch9 -b .sav
 
 # FIXME: Maven eclipse plugin tests are disabled for now, until a way
 # is found to stop it from connecting to the web despite offline mode.
@@ -1054,7 +1053,7 @@ popd >& /dev/null
 (cd maven2
 
 # One of the tests (#63) needs tools.jar. Fix the path for it
-sed -i -e s:"<systemPath>\${java.home}/../lib/tools.jar</systemPath>":"<systemPath>%{java_home}/lib/tools.jar</systemPath>":g maven-core-it/it0063/pom.xml 
+sed -i -e s:"<systemPath>\${java.home}/../lib/tools.jar</systemPath>":"<systemPath>$JAVA_HOME/lib/tools.jar</systemPath>":g maven-core-it/it0063/pom.xml 
 
 (cd integration-tests/maven-core-it-plugin
 $M2_HOME/bin/mvn -s %{maven_settings_file} $MAVEN_OPTS org.apache.maven.plugins:maven-plugin-plugin:2.1.1-SNAPSHOT:descriptor org.apache.maven.plugins:maven-resources-plugin:2.2-SNAPSHOT:resources org.apache.maven.plugins:maven-compiler-plugin:2.1-SNAPSHOT:compile org.apache.maven.plugins:maven-jar-plugin:2.1-SNAPSHOT:jar org.apache.maven.plugins:maven-install-plugin:2.2-SNAPSHOT:install
