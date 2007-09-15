@@ -49,7 +49,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.6
+Release:        %mkrel 10.6.7
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
@@ -275,8 +275,6 @@ BuildArch:      noarch
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 ExcludeArch:         ppc64
 %endif
 
@@ -307,8 +305,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-ant
@@ -323,8 +319,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-antlr
@@ -339,8 +333,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-antrun
@@ -360,8 +352,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-assembly
@@ -379,8 +369,6 @@ Requires:       plexus-velocity >= 1.1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-checkstyle
@@ -397,8 +385,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-clean
@@ -417,8 +403,6 @@ Requires:       plexus-compiler >= 1.5.1
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-clover
@@ -436,8 +420,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-compiler
@@ -454,8 +436,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-dependency
@@ -472,8 +452,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-deploy
@@ -489,8 +467,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-ear
@@ -506,8 +482,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-eclipse
@@ -522,8 +496,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-ejb
@@ -538,8 +510,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-help
@@ -557,8 +527,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-idea
@@ -574,8 +542,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-install
@@ -591,8 +557,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-jar
@@ -612,8 +576,6 @@ Requires:       plexus-archiver >= 1.0
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-javadoc
@@ -628,8 +590,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-jxr
@@ -647,8 +607,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-one
@@ -663,8 +621,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-plugin
@@ -682,8 +638,6 @@ Requires:       pmd >= 3.3
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-pmd
@@ -701,8 +655,6 @@ Requires:       plexus-i18n >= 1.0
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-project-info-reports
@@ -716,8 +668,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-rar
@@ -733,8 +683,6 @@ Requires:       plexus-interactivity >= 1.0
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-release
@@ -750,8 +698,6 @@ Requires:       plexus-archiver >= 1.0
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-repository
@@ -766,8 +712,6 @@ Requires(postun): maven2 = %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-resources
@@ -783,8 +727,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-site
@@ -800,8 +742,6 @@ Requires:       plexus-container-default >= 1.0
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-source
@@ -819,8 +759,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-surefire
@@ -838,8 +776,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-surefire-report
@@ -858,8 +794,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-verifier
@@ -874,8 +808,6 @@ Requires:       plexus-utils >= 1.2
 
 %if %{gcj_support}
 BuildRequires:       java-gcj-compat-devel
-Requires(post):      java-gcj-compat
-Requires(postun):    java-gcj-compat
 %endif
 
 %description    plugin-war
