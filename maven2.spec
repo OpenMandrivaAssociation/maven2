@@ -149,7 +149,8 @@ BuildRequires:    maven-jxr >= 1.0-2
 BuildRequires:    maven-surefire >= 1.5.3-2
 BuildRequires:    maven-surefire-booter >= 1.5.3-2
 BuildRequires:    maven-wagon >= 1.0
-BuildRequires:    maven2-plugin-release #TODO remove late when the dependencies are clear
+BuildRequires:    maven2-plugin-release 
+#TODO remove late when the dependencies are clear
 BuildRequires:    nekohtml >= 0.9.3
 BuildRequires:    oro >= 2.0.8
 BuildRequires:    plexus-ant-factory >= 1.0-0.a1.2
