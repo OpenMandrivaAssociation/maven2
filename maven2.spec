@@ -1240,7 +1240,7 @@ ln -s %{_javadir} $RPM_BUILD_ROOT%{_datadir}/%{name}/repository/JPP
 
 # Install bash-completion support
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d
-%{__cp} -a %{SOURCE17} %{_sysconfdir}/bash_completion.d/%{name}
+%{__cp} -a %{SOURCE17} %{buildroot}%{_sysconfdir}/bash_completion.d/%{name}
 
 %if %{gcj_support}
 %{_bindir}/aot-compile-rpm
