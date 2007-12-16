@@ -114,7 +114,7 @@ Patch8:          %{name}-noexternaljavadoclinks.patch
 Patch9:          %{name}-ant17.patch
 
 BuildRequires:    jpackage-utils >= 0:1.7.2
-
+BuildRequires:    java-1.7.0-icedtea
 BuildRequires:    ant >= 1.6.5
 BuildRequires:    antlr >= 2.7.4
 BuildRequires:    bsh >= 1.3.0
@@ -939,7 +939,7 @@ export M2_HOME=`pwd`/maven2/home/%{base_name}-%{version}
 # pushd maven2/ ...
 pushd %{name} >& /dev/null
 
-export JAVA_HOME=%{java_home}
+export JAVA_HOME=%{_jvmdir}/java-icedtea
 
 mkdir bootstrap/lib
 ln -s $(build-classpath jdom) bootstrap/lib/jdom.jar
