@@ -49,7 +49,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 10.6.7
+Release:        %mkrel 10.6.8
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
@@ -113,7 +113,7 @@ Patch7:          %{name}-fastjar-manifest-fix.patch
 Patch8:          %{name}-noexternaljavadoclinks.patch 
 Patch9:          %{name}-ant17.patch
 
-BuildRequires:    jpackage-utils >= 0:1.7.2
+BuildRequires:    java-rpmbuild >= 0:1.7.2
 BuildRequires:    java-1.7.0-icedtea
 BuildRequires:    ant >= 1.6.5
 BuildRequires:    antlr >= 2.7.4
