@@ -126,7 +126,7 @@ BuildRequires:    clover
 %endif
 BuildRequires:    dom4j >= 1.6.1
 BuildRequires:    tomcat5-servlet-2.4-api
-BuildRequires:  geronimo-servlet-2.4-api >= 1.1
+BuildRequires:  geronimo-specs
 BuildRequires:    gnu.regexp >= 1.1.4
 BuildRequires:    httpunit >= 1.6
 BuildRequires:    jakarta-commons-beanutils >= 1.7.0
