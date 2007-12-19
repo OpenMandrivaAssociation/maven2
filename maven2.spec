@@ -155,6 +155,7 @@ BuildRequires:  excalibur-avalon-logkit
 BuildRequires:  geronimo-servlet-2.4-api >= 1.0
 BuildRequires:  geronimo-jaf-1.0.2-api
 BuildRequires:  geronimo-jms-1.1-api
+BuildRequires:  geronimo-javamail-1.3.1-api
 BuildRequires:  gnu.regexp >= 1.1.4
 BuildRequires:  httpunit >= 1.6
 BuildRequires:  jakarta-commons-beanutils >= 1.7.0
