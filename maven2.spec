@@ -51,7 +51,7 @@
 
 Name:           %{name}
 Version:        %{maven_version}
-Release:        %mkrel 11.0.2
+Release:        %mkrel 12
 Epoch:          0
 Summary:        Java project management and project comprehension tool
 
