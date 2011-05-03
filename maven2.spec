@@ -6,7 +6,7 @@ Version:	2.2.1
 Release:	%mkrel 1
 Summary:	Java project management and project comprehension tool
 
-Group:		Development/Build Tools
+Group:		Development/Java
 License:	ASL 2.0 and MIT and BSD
 URL:		http://maven.apache.org
 
