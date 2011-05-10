@@ -63,7 +63,7 @@ Patch6:		%{name}-%{version}-strip-jackrabbit-dep.patch
 BuildRequires:	java-devel >= 1.6.0
 BuildRequires:	classworlds
 BuildRequires:	jdom
-
+BuildRequires:	zip
 %if %{bootstrap}
 BuildRequires:	ant
 %else
