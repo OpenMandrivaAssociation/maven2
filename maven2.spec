@@ -3,7 +3,7 @@
 
 Name:	    maven2
 Version:	2.2.1
-Release:	21
+Release:	22
 Summary:	Java project management and project comprehension tool
 
 Group:		Development/Java
