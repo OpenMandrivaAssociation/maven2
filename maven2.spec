@@ -317,7 +317,7 @@ mvn-jpp -P all-models -Dmaven.repo.local=$M2_REPO/cache -Dmaven2.jpp.depmap.file
 %endif
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 export M2_HOME=$(pwd)/installation/apache-maven-%{version}
 
@@ -329,90 +329,90 @@ tar jxf ../apache-maven/target/*bz2
 )
 
 # maven2 directory in /usr/share/java
-install -dm 755 $RPM_BUILD_ROOT%{_javadir}/%{name}
+install -dm 755 %{buildroot}%{_javadir}/%{name}
 
 ###########
 # M2_HOME #
 ###########
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
+install -dm 755 %{buildroot}%{_datadir}/%{name}
 
 ###############
 # M2_HOME/bin #
 ###############
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/bin
-cp -a $M2_HOME/bin/* $RPM_BUILD_ROOT%{_datadir}/%{name}/bin
+install -dm 755 %{buildroot}%{_datadir}/%{name}/bin
+cp -a $M2_HOME/bin/* %{buildroot}%{_datadir}/%{name}/bin
 
 # Remove unnecessary batch scripts
-rm -f $RPM_BUILD_ROOT%{_datadir}/%{name}/bin/*.bat
+rm -f %{buildroot}%{_datadir}/%{name}/bin/*.bat
 
 # Update conf file for unversioned jar names
 sed -i -e s:'-classpath "${M2_HOME}"/boot/classworlds-\*.jar':'-classpath "${M2_HOME}"/boot/classworlds.jar':g \
-        $RPM_BUILD_ROOT%{_datadir}/%{name}/bin/mvn $RPM_BUILD_ROOT%{_datadir}/%{name}/bin/mvnDebug
+        %{buildroot}%{_datadir}/%{name}/bin/mvn %{buildroot}%{_datadir}/%{name}/bin/mvnDebug
 
 ################
 # M2_HOME/boot #
 ################
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/boot
+install -dm 755 %{buildroot}%{_datadir}/%{name}/boot
 %if %{bootstrap}
-cp -a $M2_HOME/boot/* $RPM_BUILD_ROOT%{_datadir}/%{name}/boot/
+cp -a $M2_HOME/boot/* %{buildroot}%{_datadir}/%{name}/boot/
 %endif
 
 ################
 # M2_HOME/conf #
 ################
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/conf
-cp -a $M2_HOME/conf/* $RPM_BUILD_ROOT%{_datadir}/%{name}/conf/
+install -dm 755 %{buildroot}%{_datadir}/%{name}/conf
+cp -a $M2_HOME/conf/* %{buildroot}%{_datadir}/%{name}/conf/
 
 ###############
 # M2_HOME/lib #
 ###############
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
+install -dm 755 %{buildroot}%{_datadir}/%{name}/lib
 
-install -p -m 644 $M2_HOME/lib/maven-%{version}-uber.jar $RPM_BUILD_ROOT%{_javadir}/%{name}/uber-%{version}.jar
-ln -s uber-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}/uber.jar
-ln -s %{_javadir}/%{name}/uber.jar $RPM_BUILD_ROOT%{_datadir}/%{name}/lib/maven-%{version}-uber.jar
+install -p -m 644 $M2_HOME/lib/maven-%{version}-uber.jar %{buildroot}%{_javadir}/%{name}/uber-%{version}.jar
+ln -s uber-%{version}.jar %{buildroot}%{_javadir}/%{name}/uber.jar
+ln -s %{_javadir}/%{name}/uber.jar %{buildroot}%{_datadir}/%{name}/lib/maven-%{version}-uber.jar
 
 ################
 # M2_HOME/poms #
 #*##############
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/poms
+install -dm 755 %{buildroot}%{_datadir}/%{name}/poms
 
 ########################
 # /etc/maven/fragments #
 ########################
-install -dm 755 $RPM_BUILD_ROOT/%{_sysconfdir}/maven/fragments
+install -dm 755 %{buildroot}/%{_sysconfdir}/maven/fragments
 
 ##############################
 # /usr/share/java repository #
 ##############################
-install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/repository
-ln -s %{_javadir} $RPM_BUILD_ROOT%{_datadir}/%{name}/repository/JPP
+install -dm 755 %{buildroot}%{_datadir}/%{name}/repository
+ln -s %{_javadir} %{buildroot}%{_datadir}/%{name}/repository/JPP
 
 ##################
 # javadir/maven2 #
 #*################
-install -dm 755 $RPM_BUILD_ROOT%{_javadir}/%{name}
+install -dm 755 %{buildroot}%{_javadir}/%{name}
 
 #######################
 # javadir/maven2/poms #
 #*#####################
-ln -s %{_datadir}/%{name}/poms $RPM_BUILD_ROOT%{_javadir}/%{name}/poms
+ln -s %{_datadir}/%{name}/poms %{buildroot}%{_javadir}/%{name}/poms
 
 ############
 # /usr/bin #
 ############
-install -dm 755 $RPM_BUILD_ROOT%{_bindir}
+install -dm 755 %{buildroot}%{_bindir}
 
 # Install files
-install -m 644 %{SOURCE104} $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.maven2-empty-dep.pom
-install -m 644 %{SOURCE105} $RPM_BUILD_ROOT%{_javadir}/%{name}/empty-dep.jar
+install -m 644 %{SOURCE104} %{buildroot}%{_datadir}/%{name}/poms/JPP.maven2-empty-dep.pom
+install -m 644 %{SOURCE105} %{buildroot}%{_javadir}/%{name}/empty-dep.jar
 
 # Wrappers
-/bin/cp -af %{SOURCE200} $RPM_BUILD_ROOT%{_bindir}/mvn
-/bin/cp -af %{SOURCE201} $RPM_BUILD_ROOT%{_bindir}/mvn-jpp
+/bin/cp -af %{SOURCE200} %{buildroot}%{_bindir}/mvn
+/bin/cp -af %{SOURCE201} %{buildroot}%{_bindir}/mvn-jpp
 
 %if %{bootstrap}
-    cp -af `pwd`/.m2/repository $RPM_BUILD_ROOT%{_datadir}/%{name}/bootstrap_repo
+    cp -af `pwd`/.m2/repository %{buildroot}%{_datadir}/%{name}/bootstrap_repo
 %endif
 
 ###################
@@ -451,38 +451,38 @@ for file in \
 
 
         pushd $DIR
-          install -m 644 $FNAME $RPM_BUILD_ROOT%{_javadir}/%{name}/
-          ln -s $FNAME $RPM_BUILD_ROOT%{_javadir}/%{name}/$UNVER_NAME
-          install -m 644 ../pom.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.%{name}-$UNVER_NAME_WITH_NO_EXT.pom
+          install -m 644 $FNAME %{buildroot}%{_javadir}/%{name}/
+          ln -s $FNAME %{buildroot}%{_javadir}/%{name}/$UNVER_NAME
+          install -m 644 ../pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-$UNVER_NAME_WITH_NO_EXT.pom
           %add_to_maven_depmap org.apache.maven $ARTIFACT %{version} JPP/%{name} $UNVER_NAME_WITH_NO_EXT
         popd
 done
 
 # maven-reporting-api
-install -m 644  maven-reporting/maven-reporting-api/target/maven-reporting-api-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}/
-ln -s maven-reporting-api-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}/maven-reporting-api.jar
-install -m 644 maven-reporting/maven-reporting-api/pom.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting-api.pom
+install -m 644  maven-reporting/maven-reporting-api/target/maven-reporting-api-%{version}.jar %{buildroot}%{_javadir}/%{name}/
+ln -s maven-reporting-api-%{version}.jar %{buildroot}%{_javadir}/%{name}/maven-reporting-api.jar
+install -m 644 maven-reporting/maven-reporting-api/pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting-api.pom
 %add_to_maven_depmap org.apache.maven.reporting maven-reporting-api %{version} JPP/%{name} maven-reporting-api
 
 # maven-reporting pom
-install -m 644 maven-reporting/pom.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting.pom
+install -m 644 maven-reporting/pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting.pom
 %add_to_maven_depmap org.apache.maven.reporting maven-reporting %{version} JPP/%{name} maven-reporting
 
 # maven pom
-install -m 644 pom.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.%{name}-maven.pom
+install -m 644 pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven.pom
 %add_to_maven_depmap org.apache.maven maven %{version} JPP/%{name} maven
 
 # create dangling symlinks but fix bz#613866
-(cd $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
+(cd %{buildroot}%{_datadir}/%{name}/lib
   build-jar-repository -s -p . jdom
 )
 
-(cd $RPM_BUILD_ROOT%{_datadir}/%{name}/boot
+(cd %{buildroot}%{_datadir}/%{name}/boot
   build-jar-repository -s -p . classworlds
 )
 
 %if ! %{bootstrap}
-(cd $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
+(cd %{buildroot}%{_datadir}/%{name}/lib
   build-jar-repository -s -p . backport-util-concurrent jsch commons-cli commons-httpclient commons-codec nekohtml maven-shared/reporting-api maven-doxia/logging-api maven-doxia/sink-api maven-wagon/file maven-wagon/http maven-wagon/http-lightweight maven-wagon/http-shared maven-wagon/provider-api maven-wagon/ssh maven-wagon/ssh-common maven-wagon/ssh-external plexus/container-default plexus/interactivity-api plexus/interpolation plexus/utils slf4j/jcl-over-slf4j slf4j/api slf4j/jdk14 slf4j/nop plexus/plexus-cipher plexus/plexus-sec-dispatcher xerces-j2 xml-commons-apis
 )
 %endif
@@ -494,7 +494,7 @@ install -m 644 pom.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/poms/JPP.%{name}-maven
 %update_maven_depmap
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
