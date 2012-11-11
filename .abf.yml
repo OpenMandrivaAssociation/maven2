@@ -1,0 +1,11 @@
+sources:
+  "maven2-2.2.1-bootstrapdeps.tar.gz:"	0a7f7f67f8c7f98eed9b7ba72782c14ff2ce71ab
+  "maven2-2.2.1-depmap.xml:"	d43aef507e7b3d9e2a165b67fcfe06cf7dd44551
+  "maven2-2.2.1-settings.xml:"	d9cc03bec5792ac873eccaa8fb3f77173ff5397c
+  "maven2-2.2.1.tar.gz:"	dc9fe901bf9c1768e7972e9d8c852fde7358a210
+  "maven2-empty-dep.jar:"	b821dcb47a2f08836f8576cd0b6ba6dfe719c71f
+  "maven2-empty-dep.pom:"	24c497f2325c9277b3016e1d368572d47568beea
+  "maven2-JPackageRepositoryLayout.java:"	436fd033e0a7d8e0539da7c15da935a5b208567e
+  "maven2-jpp-script:"	f846a17c78088f47a073ed9a70ce9adcdc2aca9e
+  "maven2-MavenJPackageDepmap.java:"	792028c057874cef19e9534133fc5775e22d37e1
+  "maven2-script:"	2410a3245eedd890e5722fd9b938086912ef38dc
