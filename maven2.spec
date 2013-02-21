@@ -1,5 +1,4 @@
-%define bootstrap	1
-%define __jar_repack	0
+%bcond_without	bootstrap
 
 Name:		maven2
 Version:	2.2.1
@@ -64,7 +63,7 @@ BuildRequires:	java-devel >= 1.6.0
 BuildRequires:	classworlds
 BuildRequires:	jdom
 BuildRequires:	zip
-%if %{bootstrap}
+%if %{with bootstrap}
 BuildRequires:	ant
 %else
 BuildRequires:	apache-resource-bundles
@@ -145,7 +144,7 @@ BuildRequires:	velocity
 Requires:	classworlds
 Requires:	jdom
 
-%if !%{bootstrap}
+%if !%{with bootstrap}
 Requires:	apache-resource-bundles
 Requires:	objectweb-asm
 Requires:	backport-util-concurrent
@@ -224,11 +223,11 @@ build, reporting and documentation from a central piece of information.
 %patch1 -p1 -b .jpp
 %patch2 -p0 -b .update-tests
 
-%if ! %{bootstrap}
+%if ! %{with bootstrap}
 %patch4 -p0 -b .unshade
 %endif
 
-%if %{bootstrap}
+%if %{with bootstrap}
 %patch3 -p0 -b .enable-bootstrap-repo
 %endif
 
@@ -237,7 +236,7 @@ export M2_REPO=`pwd`/.m2
 mkdir $M2_REPO
 
 # if bootstrapping, extract the dependencies
-%if %{bootstrap}
+%if %{with bootstrap}
 pushd $M2_REPO
 
   tar xzf %{SOURCE1}
@@ -266,7 +265,7 @@ cp %{SOURCE102} maven-artifact/src/main/java/org/apache/maven/artifact/repositor
 # disable parallel artifact resolution
 %patch5 -p1 -b .parallel-artifacts-resolution
 
-%if !%{bootstrap}
+%if !%{with bootstrap}
 # remove unneeded jackrabbit dependency
 %patch6 -p1 -b .strip-jackrabbit-dep
 %endif
@@ -297,7 +296,7 @@ sed -i -s s:__M2_SETTINGS_FILE__:$M2_HOME/conf/settings.xml:g build.xml
 # FIXME: These tests fail when building with maven for an unknown reason
 rm -f maven-core/src/test/java/org/apache/maven/WagonSelectorTest.java
 rm -f maven-artifact-manager/src/test/java/org/apache/maven/artifact/manager/DefaultWagonManagerTest.java
-%if %{bootstrap}
+%if %{with bootstrap}
 ant -Dmaven.repo.local=$M2_REPO/cache
 %else
 mvn-jpp -P all-models -Dmaven.repo.local=$M2_REPO/cache -Dmaven2.jpp.depmap.file=%{SOURCE103} install
@@ -338,7 +337,7 @@ sed -i -e s:'-classpath "${M2_HOME}"/boot/classworlds-\*.jar':'-classpath "${M2_
 # M2_HOME/boot #
 ################
 install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}/boot
-%if %{bootstrap}
+%if %{with bootstrap}
 cp -a $M2_HOME/boot/* $RPM_BUILD_ROOT%{_datadir}/%{name}/boot/
 %endif
 
@@ -386,7 +385,7 @@ ln -s %{_datadir}/%{name}/poms $RPM_BUILD_ROOT%{_javadir}/%{name}/poms
 install -m755 %{SOURCE200} -D $RPM_BUILD_ROOT%{_bindir}/mvn
 install -m755 %{SOURCE201} -D $RPM_BUILD_ROOT%{_bindir}/mvn-jpp
 
-%if %{bootstrap}
+%if %{with bootstrap}
     cp -af `pwd`/.m2/repository $RPM_BUILD_ROOT%{_datadir}/%{name}/bootstrap_repo
 %endif
 
@@ -456,7 +455,7 @@ pushd $RPM_BUILD_ROOT%{_datadir}/%{name}/boot
   build-jar-repository -s -p . classworlds
 popd
 
-%if ! %{bootstrap}
+%if ! %{with bootstrap}
 pushd $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
   build-jar-repository -s -p . backport-util-concurrent jsch commons-cli commons-httpclient commons-codec nekohtml maven-shared/reporting-api maven-doxia/logging-api maven-doxia/sink-api maven-wagon/file maven-wagon/http maven-wagon/http-lightweight maven-wagon/http-shared maven-wagon/provider-api maven-wagon/ssh maven-wagon/ssh-common maven-wagon/ssh-external plexus/container-default plexus/interactivity-api plexus/interpolation plexus/utils slf4j/jcl-over-slf4j slf4j/api slf4j/jdk14 slf4j/nop plexus/plexus-cipher plexus/plexus-sec-dispatcher xerces-j2 xml-commons-apis
 popd
@@ -484,7 +483,7 @@ popd
 %{_mavendepmapfragdir}
 %{_javadir}/%{name}
 
-%if %{bootstrap}
+%if %{with bootstrap}
 %{_datadir}/%{name}/bootstrap_repo
 %endif
 %doc
