@@ -4,7 +4,7 @@
 Summary:	Java project management and project comprehension tool
 Name:		maven2
 Version:	2.2.1
-Release:	6
+Release:	7
 Group:		Development/Java
 License:	ASL 2.0 and MIT and BSD
 Url:		http://maven.apache.org
