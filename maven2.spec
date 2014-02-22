@@ -1,233 +1,209 @@
-%define bootstrap	1
-%define __jar_repack	0
+%{?_javapackages_macros:%_javapackages_macros}
+%global bootstrap 0
+%global __jar_repack 0
 
-Summary:	Java project management and project comprehension tool
-Name:		maven2
+%global main_pkg maven
+
+Name:	    maven2
 Version:	2.2.1
-Release:	5
-Group:		Development/Java
+Release:	46.1%{?dist}
+Summary:	Java project management and project comprehension tool
+
+
 License:	ASL 2.0 and MIT and BSD
-Url:		http://maven.apache.org
+URL:		http://maven.apache.org
+
 # export https://svn.apache.org/repos/asf/maven/maven-2/tags/maven-%{version}/ apache-maven-%{version}
 # tar czvf %{name}-%{version}.tar.gz apache-maven-%{version}
 Source0:	%{name}-%{version}.tar.gz
-# Since we are using the entire dependency set "as is", we need to atleast try
-# and make it so that only one version is packaged in the binary blob. This
-# server an additional (and more important) purpose ... it ensures that a
-# single version of each module is enough; because if not, versioned rpm names
-# would be needed for those dependencies. The idea is as follows:
 
-# Required by maven:
-#  org/codehaus/plexus/1.0/plexus-1.0.jar
-#  org/codehaus/plexus/1.1/plexus-1.1.jar
-# What we package in the blob:
-#  org/codehaus/plexus/1.1/plexus-1.1.jar
-#  org/codehaus/plexus/1.0/plexus-1.0.jar -> ../1.1/plexus-1.1.jar
-
-# Doing this for the hundreds of jars is a huge pain.. so we do the only
-# thing sane people can. Crazy scripting magic! To generate the tarball
-
-# rm -rf ~/.m2
-# tar xzf SOURCE0
-# cd apache-maven-%{version}
-# export M2_HOME=`pwd`/installation/apache-maven-%{version}
-# ant
-# cd ~/.m2
-# SOURCE100
-# Find maven-%{version}-bootstrapdeps.tar.gz in ./
-Source1:	%{name}-%{version}-bootstrapdeps.tar.gz
 
 # 1xx for non-upstream/created sources
-Source100:	%{name}-%{version}-settings.xml
-Source101:	%{name}-JPackageRepositoryLayout.java
-Source102:	%{name}-MavenJPackageDepmap.java
-Source103:	%{name}-%{version}-depmap.xml
-Source104:	%{name}-empty-dep.pom
-Source105:	%{name}-empty-dep.jar
+Source100:    %{name}-%{version}-settings.xml
+Source103:    %{name}-%{version}-depmap.xml
 
-# 2xx for created non-buildable sources
-Source200:	%{name}-script
-Source201:	%{name}-jpp-script
+Patch0:     %{name}-antbuild.patch
+Patch2:     %{name}-%{version}-update-tests.patch
+Patch3:     %{name}-%{version}-enable-bootstrap-repo.patch
+Patch4:     %{name}-%{version}-unshade.patch
+Patch5:     %{name}-%{version}-default-resolver-pool-size.patch
+Patch6:     %{name}-%{version}-strip-jackrabbit-dep.patch
+Patch7:     %{name}-%{version}-classworlds.patch
+Patch8:     %{name}-%{version}-migrate-to-plexus-containers-container-default.patch
 
-Patch0:		%{name}-antbuild.patch
-Patch1:		%{name}-%{version}-jpp.patch
-Patch2:		%{name}-%{version}-update-tests.patch
-Patch3:		%{name}-%{version}-enable-bootstrap-repo.patch
-Patch4:		%{name}-%{version}-unshade.patch
-Patch5:		%{name}-%{version}-default-resolver-pool-size.patch
-Patch6:		%{name}-%{version}-strip-jackrabbit-dep.patch
+BuildRequires: java-devel >= 1.6.0
 
-BuildRequires:	java-devel >= 1.6.0
-BuildRequires:	classworlds
-BuildRequires:	jdom
-BuildRequires:	zip
-BuildRequires:	xml-commons-apis
 %if %{bootstrap}
-BuildRequires:	ant
+BuildRequires: ant
 %else
-BuildRequires:	apache-resource-bundles
-BuildRequires:	objectweb-asm
-BuildRequires:	backport-util-concurrent
-BuildRequires:	buildnumber-maven-plugin
-BuildRequires:	bsh
-BuildRequires:	jsch
-BuildRequires:	apache-commons-codec
-BuildRequires:	jakarta-commons-httpclient
-BuildRequires:	apache-commons-io
-BuildRequires:	apache-commons-lang
-BuildRequires:	apache-commons-logging
-BuildRequires:	jakarta-commons-cli
-BuildRequires:	jakarta-commons-collections
-BuildRequires:	easymock
-BuildRequires:	junit
-BuildRequires:	nekohtml
-BuildRequires:	ant
-BuildRequires:	maven-doxia
-BuildRequires:	jetty
-BuildRequires:	maven-archiver
-BuildRequires:	maven-assembly-plugin
-BuildRequires:	maven-doxia-tools
-BuildRequires:	maven-enforcer-api
-BuildRequires:	maven-enforcer-plugin
-BuildRequires:	maven-shade-plugin
-BuildRequires:	maven-clean-plugin
-BuildRequires:	maven-compiler-plugin
-BuildRequires:	maven-resources-plugin
-BuildRequires:	maven-install-plugin
-BuildRequires:	maven-jar-plugin
-BuildRequires:	maven-plugin-testing-harness
-BuildRequires:	maven-pmd-plugin
-BuildRequires:	maven-shared-file-management
-BuildRequires:	maven-shared-common-artifact-filters
-BuildRequires:	maven-shared-dependency-tree
-BuildRequires:	maven-shared-repository-builder
-BuildRequires:	maven-shared-io
-BuildRequires:	maven-shared-downloader
-BuildRequires:	maven-shared-filtering
-BuildRequires:	maven-shared-reporting-api
-BuildRequires:	maven-site-plugin
-BuildRequires:	maven-surefire-maven-plugin
-BuildRequires:	maven-surefire-provider-junit
-BuildRequires:	maven-scm
-BuildRequires:	maven-wagon
-BuildRequires:	modello
-BuildRequires:	multithreadedtc
-BuildRequires:	plexus-active-collections
-BuildRequires:	plexus-ant-factory
-BuildRequires:	plexus-archiver
-BuildRequires:	plexus-cipher
-BuildRequires:	plexus-bsh-factory
-BuildRequires:	plexus-build-api
-BuildRequires:	plexus-classworlds
-BuildRequires:	plexus-compiler
-BuildRequires:	plexus-component-api
-BuildRequires:	plexus-containers-container-default
-BuildRequires:	plexus-container-default
-BuildRequires:	plexus-i18n
-BuildRequires:	plexus-interactivity
-BuildRequires:	plexus-interpolation
-BuildRequires:	plexus-io
-BuildRequires:	plexus-resources
-BuildRequires:	plexus-sec-dispatcher
-BuildRequires:	plexus-utils
-BuildRequires:	plexus-velocity
-BuildRequires:	regexp
-BuildRequires:	forge-parent
-BuildRequires:	spice-parent
-BuildRequires:	jakarta-oro
-BuildRequires:	regexp
-BuildRequires:	slf4j
-BuildRequires:	velocity
+BuildRequires: apache-resource-bundles
+BuildRequires: objectweb-asm
+BuildRequires: buildnumber-maven-plugin
+BuildRequires: bsh
+BuildRequires: jsch
+BuildRequires: apache-commons-codec
+BuildRequires: jakarta-commons-httpclient
+BuildRequires: apache-commons-io
+BuildRequires: apache-commons-lang
+BuildRequires: apache-commons-logging
+BuildRequires: apache-commons-cli
+BuildRequires: apache-commons-collections
+BuildRequires: apache-commons-parent
+BuildRequires: maven-local
+BuildRequires: maven-enforcer-plugin
+BuildRequires: maven-shade-plugin
+BuildRequires: maven-install-plugin
+BuildRequires: plexus-containers
+BuildRequires: plexus-containers-container-default
 %endif
 
-Requires:	classworlds
-Requires:	jdom
 
-%if !%{bootstrap}
-Requires:	apache-resource-bundles
-Requires:	objectweb-asm
-Requires:	backport-util-concurrent
-Requires:	bsh
-Requires:	jsch
-Requires:	apache-commons-codec
-Requires:	jakarta-commons-httpclient
-Requires:	apache-commons-io
-Requires:	apache-commons-lang
-Requires:	apache-commons-logging
-Requires:	jakarta-commons-cli
-Requires:	jakarta-commons-collections
-Requires:	easymock
-Requires:	junit
-Requires:	nekohtml
-Requires:	ant
-Requires:	maven-doxia
-Requires:	jetty
-Requires:	maven-archiver
-Requires:	maven-doxia-tools
-Requires:	maven-enforcer-api
-Requires:	maven-enforcer-plugin
-Requires:	maven-plugin-testing-harness
-Requires:	maven-shared-file-management
-Requires:	maven-shared-common-artifact-filters
-Requires:	maven-shared-dependency-tree
-Requires:	maven-shared-repository-builder
-Requires:	maven-shared-io
-Requires:	maven-shared-downloader
-Requires:	maven-shared-filtering
-Requires:	maven-shared-reporting-api
-Requires:	maven-surefire-provider-junit
-Requires:	maven-scm
-Requires:	maven-wagon
-Requires:	modello
-Requires:	multithreadedtc
-Requires:	jakarta-oro
-Requires:	plexus-active-collections
-Requires:	plexus-ant-factory
-Requires:	plexus-archiver
-Requires:	plexus-cipher
-Requires:	plexus-bsh-factory
-Requires:	plexus-build-api
-Requires:	plexus-classworlds
-Requires:	plexus-compiler
-Requires:	plexus-component-api
-Requires:	plexus-containers-container-default
-Requires:	plexus-container-default
-Requires:	plexus-i18n
-Requires:	plexus-interactivity
-Requires:	plexus-interpolation
-Requires:	plexus-io
-Requires:	plexus-resources
-Requires:	plexus-sec-dispatcher
-Requires:	plexus-utils
-Requires:	plexus-velocity
-Requires:	regexp
-Requires:	forge-parent
-Requires:	spice-parent
-Requires:	jakarta-oro
-Requires:	regexp
-Requires:	slf4j
-Requires:	velocity
-%endif
-BuildArch:	noarch
+BuildArch: noarch
 
 %description
 Apache Maven is a software project management and comprehension tool. Based on
 the concept of a project object model (POM), Maven can manage a project's
 build, reporting and documentation from a central piece of information.
 
-%prep
-%setup -q -n apache-maven-%{version}
+%package -n maven-artifact
 
-%patch0 -p0 -b .antbuild
-%patch1 -p1 -b .jpp
-%patch2 -p0 -b .update-tests
+Summary:        Compatibility Maven artifact artifact
+Requires:       jpackage-utils
+Requires:       plexus-utils
+Requires:       plexus-containers-container-default
+
+%description -n maven-artifact
+Maven artifact manager artifact
+
+%package -n maven-artifact-manager
+
+Summary:        Compatibility Maven artifact manager artifact
+Requires:       jpackage-utils
+Requires:       plexus-classworlds
+Requires:       plexus-utils
+Requires:       plexus-containers-container-default
+Requires:       maven-artifact = %{version}-%{release}
+Requires:       maven-wagon
+
+%description -n maven-artifact-manager
+Maven artifact manager artifact
+
+%package -n maven-error-diagnostics
+
+Summary:        Compatibility Maven error diagnostics artifact
+Requires:       jpackage-utils
+Requires:       plexus-containers-container-default
+
+%description -n maven-error-diagnostics
+Maven error diagnostics artifact
+
+%package -n maven-model
+
+Summary:        Compatibility Maven model artifact
+Requires:       jpackage-utils
+Requires:       plexus-utils
+
+%description -n maven-model
+Maven model artifact
+
+%package -n maven-monitor
+
+Summary:        Compatibility Maven monitor artifact
+Requires:       jpackage-utils
+
+%description -n maven-monitor
+Maven monitor artifact
+
+%package -n maven-plugin-registry
+
+Summary:        Compatibility Maven plugin registry artifact
+Requires:       jpackage-utils
+Requires:       plexus-utils
+Requires:       plexus-containers-container-default
+
+%description -n maven-plugin-registry
+Maven plugin registry artifact
+
+%package -n maven-profile
+
+Summary:        Compatibility Maven profile artifact
+Requires:       jpackage-utils
+Requires:       maven-model = %{version}-%{release}
+Requires:       plexus-utils
+Requires:       plexus-interpolation
+Requires:       plexus-containers-container-default
+
+%description -n maven-profile
+Maven profile artifact
+
+%package -n maven-project
+
+Summary:        Compatibility Maven project artifact
+Requires:       jpackage-utils
+Requires:       maven-artifact-manager = %{version}-%{release}
+Requires:       maven-profile = %{version}-%{release}
+Requires:       maven-plugin-registry = %{version}-%{release}
+Requires:       maven-model = %{version}-%{release}
+Requires:       maven-settings = %{version}-%{release}
+Requires:       plexus-interpolation
+Requires:       plexus-utils
+Requires:       plexus-containers-container-default
+
+%description -n maven-project
+Maven project artifact
+
+%package -n maven-settings
+
+Summary:        Compatibility Maven settings artifact
+Requires:       jpackage-utils
+Requires:       maven-model = %{version}-%{release}
+Requires:       plexus-interpolation
+Requires:       plexus-utils
+Requires:       plexus-containers-container-default
+
+%description -n maven-settings
+Maven settings artifact
+
+%package -n maven-toolchain
+
+Summary:        Compatibility Maven toolchain artifact
+Requires:       jpackage-utils
+
+%description -n maven-toolchain
+Maven toolchain artifact
+
+%package -n maven-plugin-descriptor
+
+Summary:        Maven Plugin Description Model
+Requires:       jpackage-utils
+Requires:       maven
+Requires:       plexus-classworlds
+Requires:       plexus-containers-container-default
+
+%description -n maven-plugin-descriptor
+Maven toolchain artifact
+
+%package javadoc
+Summary:        Javadoc for %{name}
+
+Requires:       jpackage-utils
+
+%description javadoc
+Javadoc for %{name}.
+
+
+%prep
+%setup -q -n apache-maven-2.2.1
+
+%patch0
+%patch2
 
 %if ! %{bootstrap}
-%patch4 -p0 -b .unshade
+%patch4
 %endif
 
 %if %{bootstrap}
-%patch3 -p0 -b .enable-bootstrap-repo
+%patch3
 %endif
 
 # set cache location
@@ -236,7 +212,7 @@ mkdir $M2_REPO
 
 # if bootstrapping, extract the dependencies
 %if %{bootstrap}
-pushd $M2_REPO
+(cd $M2_REPO
 
   tar xzf %{SOURCE1}
 
@@ -246,36 +222,44 @@ pushd $M2_REPO
   # with the one in m-r-r-p. We therefore need to remove the descriptor
   # from m-r-r-p first
   zip -d repository/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-beta-2/maven-remote-resources-plugin-1.0-beta-2.jar \
-	META-INF/plexus/components.xml
+         META-INF/plexus/components.xml
 
   # resource bundle 1.3 is needed during build, but not when done via
   # upstream, for some reason
   mkdir -p repository/org/apache/apache-jar-resource-bundle/1.3
   ln -s ../1.4/apache-jar-resource-bundle-1.4.jar \
-	repository/org/apache/apache-jar-resource-bundle/1.3/apache-jar-resource-bundle-1.3.jar
+        repository/org/apache/apache-jar-resource-bundle/1.3/apache-jar-resource-bundle-1.3.jar
   ln -s ../1.4/apache-jar-resource-bundle-1.4.jar.sha1 \
-	repository/org/apache/apache-jar-resource-bundle/1.3/apache-jar-resource-bundle-1.3.jar.sha1
-popd
+        repository/org/apache/apache-jar-resource-bundle/1.3/apache-jar-resource-bundle-1.3.jar.sha1
+)
 %endif
-
-cp %{SOURCE101} maven-artifact/src/main/java/org/apache/maven/artifact/repository/layout/JPackageRepositoryLayout.java
-cp %{SOURCE102} maven-artifact/src/main/java/org/apache/maven/artifact/repository/layout/MavenJPackageDepmap.java
 
 # disable parallel artifact resolution
-%patch5 -p1 -b .parallel-artifacts-resolution
+%patch5 -p1
 
-%if !%{bootstrap}
 # remove unneeded jackrabbit dependency
-%patch6 -p1 -b .strip-jackrabbit-dep
-%endif
+%patch6 -p1
 
-# test case is incorrectly assuming that target executed by antcall
-# can propagate references to its parent (stopped working with ant 1.8)
-rm maven-script/maven-script-ant/src/test/java/org/apache/maven/script/ant/AntMojoWrapperTest.java
+%patch7 -p1
 
-# FIXIT: look why these tests are failing with maven-surefire 2.6
-rm maven-artifact/src/test/java/org/apache/maven/artifact/resolver/DefaultArtifactCollectorTest.java
-rm maven-project/src/test/java/org/apache/maven/project/validation/DefaultModelValidatorTest.java
+%patch8 -p1
+
+for nobuild in apache-maven maven-artifact-test \
+               maven-compat maven-core maven-plugin-api \
+               maven-plugin-parameter-documenter maven-reporting \
+               maven-script;do
+    %pom_disable_module $nobuild
+done
+
+# Don't depend on backport-util-concurrent
+%pom_remove_dep :backport-util-concurrent
+%pom_remove_dep :backport-util-concurrent maven-artifact-manager
+sed -i s/edu.emory.mathcs.backport.// `find -name DefaultArtifactResolver.java`
+
+# Tests are skipped, so remove dependencies with scope 'test'.
+for pom in $(grep -l ">test<" $(find -name pom.xml | grep -v /test/)); do
+    %pom_xpath_remove "pom:dependency[pom:scope[text()='test']]" $pom
+done
 
 %build
 export M2_REPO=`pwd`/.m2
@@ -292,198 +276,287 @@ sed -i -e s:__M2_REMOTEREPO_PLACEHOLDER__:"file\://$M2_REPO/repository":g $M2_HO
 # replace settings file location before patching
 sed -i -s s:__M2_SETTINGS_FILE__:$M2_HOME/conf/settings.xml:g build.xml
 
-# FIXME: These tests fail when building with maven for an unknown reason
-rm -f maven-core/src/test/java/org/apache/maven/WagonSelectorTest.java
-rm -f maven-artifact-manager/src/test/java/org/apache/maven/artifact/manager/DefaultWagonManagerTest.java
 %if %{bootstrap}
 ant -Dmaven.repo.local=$M2_REPO/cache
 %else
-mvn-jpp -P all-models -Dmaven.repo.local=$M2_REPO/cache -Dmaven2.jpp.depmap.file=%{SOURCE103} install
+unset M2_HOME
+export M2_HOME
+mvn-rpmbuild -Dmaven.test.skip=true -P all-models \
+             -Dmaven.local.depmap.file=%{SOURCE103} \
+             install javadoc:aggregate
 %endif
 
 %install
-export M2_HOME=$(pwd)/installation/apache-maven-%{version}
-
-rm -rf $M2_HOME
-
-mkdir -p $(pwd)/installation/
-pushd $(pwd)/installation/
-tar jxf ../apache-maven/target/*bz2
-popd
 
 # maven2 directory in /usr/share/java
-install -dm 755 %{buildroot}%{_javadir}/%{name}
-
-###########
-# M2_HOME #
-###########
-install -dm 755 %{buildroot}%{_datadir}/%{name}
-
-###############
-# M2_HOME/bin #
-###############
-install -dm 755 %{buildroot}%{_datadir}/%{name}/bin
-cp -a $M2_HOME/bin/* %{buildroot}%{_datadir}/%{name}/bin
-
-# Remove unnecessary batch scripts
-rm -f %{buildroot}%{_datadir}/%{name}/bin/*.bat
-
-# Update conf file for unversioned jar names
-sed -i -e s:'-classpath "${M2_HOME}"/boot/classworlds-\*.jar':'-classpath "${M2_HOME}"/boot/classworlds.jar':g \
-	%{buildroot}%{_datadir}/%{name}/bin/mvn %{buildroot}%{_datadir}/%{name}/bin/mvnDebug
-
-################
-# M2_HOME/boot #
-################
-install -dm 755 %{buildroot}%{_datadir}/%{name}/boot
-%if %{bootstrap}
-cp -a $M2_HOME/boot/* %{buildroot}%{_datadir}/%{name}/boot/
-%endif
-
-################
-# M2_HOME/conf #
-################
-install -dm 755 %{buildroot}%{_datadir}/%{name}/conf
-cp -a $M2_HOME/conf/* %{buildroot}%{_datadir}/%{name}/conf/
-
-###############
-# M2_HOME/lib #
-###############
-install -dm 755 %{buildroot}%{_datadir}/%{name}/lib
-
-install -p -m 644 $M2_HOME/lib/maven-%{version}-uber.jar %{buildroot}%{_javadir}/%{name}/uber-%{version}.jar
-ln -s uber-%{version}.jar %{buildroot}%{_javadir}/%{name}/uber.jar
-ln -s %{_javadir}/%{name}/uber.jar %{buildroot}%{_datadir}/%{name}/lib/maven-%{version}-uber.jar
-
-################
-# M2_HOME/poms #
-#*##############
-install -dm 755 %{buildroot}%{_datadir}/%{name}/poms
-
-########################
-# /etc/maven/fragments #
-########################
-install -dm 755 %{buildroot}/%{_sysconfdir}/maven/fragments
-
-##############################
-# /usr/share/java repository #
-##############################
-install -dm 755 %{buildroot}%{_datadir}/%{name}/repository
-ln -s %{_javadir} %{buildroot}%{_datadir}/%{name}/repository/JPP
-
-#######################
-# javadir/maven2/poms #
-#*#####################
-
-# Install files
-install -m 644 %{SOURCE104} -D %{buildroot}%{_datadir}/%{name}/poms/JPP.maven2-empty-dep.pom
-install -m 644 %{SOURCE105} -D %{buildroot}%{_javadir}/%{name}/empty-dep.jar
-ln -s %{_datadir}/%{name}/poms %{buildroot}%{_javadir}/%{name}/poms
-
-# Wrappers
-install -m755 %{SOURCE200} -D %{buildroot}%{_bindir}/mvn
-install -m755 %{SOURCE201} -D %{buildroot}%{_bindir}/mvn-jpp
-
-%if %{bootstrap}
-    cp -af `pwd`/.m2/repository %{buildroot}%{_datadir}/%{name}/bootstrap_repo
-%endif
-
-###################
-# Individual jars #
-###################
-
-for file in \
-    maven-script/maven-script-ant/target/maven-script-ant-%{version}.jar \
-    maven-script/maven-script-beanshell/target/maven-script-beanshell-%{version}.jar \
-    apache-maven/target/apache-maven-%{version}.jar \
-    maven-profile/target/maven-profile-%{version}.jar \
-    maven-artifact-manager/target/maven-artifact-manager-%{version}.jar \
-    maven-artifact-test/target/maven-artifact-test-%{version}.jar \
-    maven-monitor/target/maven-monitor-%{version}.jar \
-    maven-toolchain/target/maven-toolchain-%{version}.jar \
-    maven-toolchain/target/original-maven-toolchain-%{version}.jar \
-    maven-project/target/maven-project-%{version}.jar \
-    maven-settings/target/maven-settings-%{version}.jar \
-    maven-plugin-parameter-documenter/target/maven-plugin-parameter-documenter-%{version}.jar \
-    maven-model/target/maven-model-%{version}.jar \
-    maven-artifact/target/maven-artifact-%{version}.jar \
-    maven-repository-metadata/target/maven-repository-metadata-%{version}.jar \
-    maven-plugin-api/target/maven-plugin-api-%{version}.jar \
-    maven-error-diagnostics/target/maven-error-diagnostics-%{version}.jar \
-    maven-compat/target/maven-compat-%{version}.jar \
-    maven-core/target/maven-core-%{version}.jar \
-    maven-plugin-registry/target/maven-plugin-registry-%{version}.jar \
-    maven-plugin-descriptor/target/maven-plugin-descriptor-%{version}.jar; do \
-
-	FNAME=`basename $file`
-	FNAME_NO_EXT=`basename $file .jar`
-	DIR=`dirname $file`
-	UNVER_NAME=`basename $file | sed -e s:-%{version}::g`
-	UNVER_NAME_WITH_NO_EXT=`echo $FNAME_NO_EXT | sed -e s:-%{version}::g`
-	ARTIFACT=`basename \`dirname $DIR\``
+install -dm 755 $RPM_BUILD_ROOT%{_javadir}/%{main_pkg}
+install -dm 755 $RPM_BUILD_ROOT%{_mavenpomdir}
 
 
-	pushd $DIR
-	  install -m 644 $FNAME %{buildroot}%{_javadir}/%{name}/
-	  ln -s $FNAME %{buildroot}%{_javadir}/%{name}/$UNVER_NAME
-	  install -m 644 ../pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-$UNVER_NAME_WITH_NO_EXT.pom
-	  %add_to_maven_depmap org.apache.maven $ARTIFACT %{version} JPP/%{name} $UNVER_NAME_WITH_NO_EXT
-	popd
+# parts of maven2 now go into separate subpackages
+for subdir in maven-artifact-manager maven-error-diagnostics \
+              maven-monitor maven-plugin-registry \
+              maven-profile maven-project maven-toolchain maven-plugin-descriptor ;do
+     pushd $subdir
+     install -m 644 target/$subdir-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{main_pkg}/$subdir.jar
+     install -m 644 pom.xml $RPM_BUILD_ROOT%{_mavenpomdir}/JPP.%{main_pkg}-$subdir.pom
+     %add_maven_depmap JPP.%{main_pkg}-$subdir.pom %{main_pkg}/$subdir.jar -f $subdir
+     popd
 done
 
-# maven-reporting-api
-install -m 644  maven-reporting/maven-reporting-api/target/maven-reporting-api-%{version}.jar %{buildroot}%{_javadir}/%{name}/
-ln -s maven-reporting-api-%{version}.jar %{buildroot}%{_javadir}/%{name}/maven-reporting-api.jar
-install -m 644 maven-reporting/maven-reporting-api/pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting-api.pom
-%add_to_maven_depmap org.apache.maven.reporting maven-reporting-api %{version} JPP/%{name} maven-reporting-api
+# these parts are compatibility versions which are available in
+# maven-3.x as well. We default to maven-3, but if someone asks for
+# 2.x we provide few compat versions
+for subdir in \
+  maven-artifact \
+  maven-model \
+  maven-settings;
+do
+     pushd $subdir
+     install -m 644 target/$subdir-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{main_pkg}/$subdir.jar
+     install -m 644 pom.xml $RPM_BUILD_ROOT%{_mavenpomdir}/JPP.%{main_pkg}-$subdir.pom
+     %add_maven_depmap JPP.%{main_pkg}-$subdir.pom %{main_pkg}/$subdir.jar -f $subdir -v "2.0.2,2.0.6,2.0.7,2.0.8"
+     popd
+done
 
-# maven-reporting pom
-install -m 644 maven-reporting/pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven-reporting.pom
-%add_to_maven_depmap org.apache.maven.reporting maven-reporting %{version} JPP/%{name} maven-reporting
+# javadoc
+install -d -m 755 %{buildroot}%{_javadocdir}/%{name}
+cp -pr target/site/apidocs/* %{buildroot}%{_javadocdir}/%{name}
 
-# maven pom
-install -m 644 pom.xml %{buildroot}%{_datadir}/%{name}/poms/JPP.%{name}-maven.pom
-%add_to_maven_depmap org.apache.maven maven %{version} JPP/%{name} maven
 
-# create dangling symlinks but fix bz#613866
-pushd %{buildroot}%{_datadir}/%{name}/lib
-  build-jar-repository -s -p . jdom
-popd
 
-pushd %{buildroot}%{_datadir}/%{name}/boot
-  build-jar-repository -s -p . classworlds
-popd
+%files -n maven-artifact
+%{_mavendepmapfragdir}/%{name}-maven-artifact
+%{_javadir}/%{main_pkg}/maven-artifact-2.*.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-artifact-2.*.pom
 
-%if ! %{bootstrap}
-pushd %{buildroot}%{_datadir}/%{name}/lib
-  build-jar-repository -s -p . backport-util-concurrent jsch commons-cli commons-httpclient commons-codec nekohtml maven-shared/reporting-api maven-doxia/logging-api maven-doxia/sink-api maven-wagon/file maven-wagon/http maven-wagon/http-lightweight maven-wagon/http-shared maven-wagon/provider-api maven-wagon/ssh maven-wagon/ssh-common maven-wagon/ssh-external plexus/container-default plexus/interactivity-api plexus/interpolation plexus/utils slf4j/jcl-over-slf4j slf4j/api slf4j/jdk14 slf4j/nop plexus/plexus-cipher plexus/plexus-sec-dispatcher xerces-j2 xml-commons-apis
-popd
-%endif
+%files -n maven-artifact-manager
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-artifact-manager
+%{_javadir}/%{main_pkg}/maven-artifact-manager.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-artifact-manager.pom
 
-%post
-%update_maven_depmap
+%files -n maven-error-diagnostics
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-error-diagnostics
+%{_javadir}/%{main_pkg}/maven-error-diagnostics.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-error-diagnostics.pom
 
-%postun
-%update_maven_depmap
+%files -n maven-model
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-model
+%{_javadir}/%{main_pkg}/maven-model-*.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-model-*.pom
 
-%files
-%attr(0755,root,root) %{_bindir}/mvn
-%attr(0755,root,root) %{_bindir}/mvn-jpp
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/bin
-%config(noreplace) %{_datadir}/%{name}/bin/*.conf
-%attr(0755,root,root) %{_datadir}/%{name}/bin/mvn
-%attr(0755,root,root) %{_datadir}/%{name}/bin/mvnDebug
-%{_datadir}/%{name}/boot
-%{_datadir}/%{name}/conf
-%{_datadir}/%{name}/lib
-%{_datadir}/%{name}/poms
-%{_datadir}/%{name}/repository
-%{_mavendepmapfragdir}
-%{_javadir}/%{name}
+%files -n maven-monitor
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-monitor
+%{_javadir}/%{main_pkg}/maven-monitor.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-monitor.pom
 
-%if %{bootstrap}
-%{_datadir}/%{name}/bootstrap_repo
-%endif
-%doc
+%files -n maven-plugin-registry
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-plugin-registry
+%{_javadir}/%{main_pkg}/maven-plugin-registry.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-plugin-registry.pom
 
+%files -n maven-profile
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-profile
+%{_javadir}/%{main_pkg}/maven-profile.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-profile.pom
+
+%files -n maven-project
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-project
+%{_javadir}/%{main_pkg}/maven-project.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-project.pom
+
+%files -n maven-settings
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-settings
+%{_javadir}/%{main_pkg}/maven-settings-*.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-settings-*.pom
+
+%files -n maven-toolchain
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-toolchain
+%{_javadir}/%{main_pkg}/maven-toolchain.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-toolchain.pom
+
+%files -n maven-plugin-descriptor
+%doc LICENSE.txt NOTICE.txt
+%{_mavendepmapfragdir}/%{name}-maven-plugin-descriptor
+%{_javadir}/%{main_pkg}/maven-plugin-descriptor.jar
+%{_mavenpomdir}/JPP.%{main_pkg}-maven-plugin-descriptor.pom
+
+%files javadoc
+%doc LICENSE.txt NOTICE.txt
+%{_javadocdir}/*
+
+
+%changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-46
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Wed Jul 03 2013 Michal Srb <msrb@redhat.com> - 2.2.1-45
+- Add missing BR: maven-install-plugin (Resolves: #979504)
+- Migrate to plexus-containers-container-default
+
+* Wed Apr 10 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 2.2.1-44
+- Don't depend on plexus-container-default
+- Unset M2_HOME before calling mvn-rpmbuild
+- Remove test dependencies
+
+* Mon Mar 11 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 2.2.1-43
+- Rebuild to generate mvn(*) versioned provides
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-42
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 2.2.1-41
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
+
+* Fri Nov 23 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-40
+- Add license to javadoc subpackage
+
+* Thu Nov 22 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-39
+- Add license and notice files to packages
+- Add javadoc subpackage
+
+* Fri Nov  9 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 2.2.1-38
+- Don't depend on backport-util-concurrent
+
+* Mon Aug 20 2012 Michel Salim <salimma@fedoraproject.org> - 2.2.1-37
+- Provide compatibility versions for maven-artifact and -settings
+
+* Thu Jul 26 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-36
+- Remove mistaken epoch use in requires
+
+* Wed Jul 25 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-35
+- Move artifacts together with maven-3 files
+- Provide compatibility versions for maven-model
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-34
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Wed May  9 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-33
+- Completely remove main package since it was just confusing
+
+* Wed Jan 25 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-32
+- Stip down maven 2 to bare minimum
+- Remove scripts and most of home
+
+* Mon Jan 23 2012 Tomas Radej <tradej@redhat.com> - 2.2.1-31
+- Fixed Requires for plugin-descriptor
+
+* Mon Jan 23 2012 Tomas Radej <tradej@redhat.com> - 2.2.1-30
+- Moved plugin-descriptor into subpackage
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-29
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Tue Oct 11 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-28
+- Provide mvn2 script instead of mvn (maven provides that now)
+
+* Tue Jul 19 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-27
+- Add maven-error-diagnostics subpackage
+- Order subpackages according to alphabet
+
+* Tue Jul 19 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-26
+- Unown jars contained in subpackages (#723124)
+
+* Mon Jun 27 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-25
+- Add maven-toolchain subpackage
+
+* Fri Jun 24 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-24
+- Add few new subpackages
+- Add several missing requires to new subpackages
+
+* Fri Jun 24 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-23
+- Split artifact-manager and project into subpackages
+- Fix resolver to process poms and fragments from datadir
+- No more need to update_maven_depmap after this update
+
+* Mon Apr 18 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-22
+- Fix jpp script to limit maven2.jpp.mode scope
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-21
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Wed Jan 19 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-20
+- Add maven-artifact-test to installation
+
+* Tue Jan 18 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-19
+- Print plugin collector debug output only when maven2.jpp.debug mode is on
+
+* Wed Dec 22 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-18
+- Add xml-commons-apis to lib directory
+- fixes NoClassDefFoundError org/w3c/dom/ElementTraversal
+
+* Fri Dec 10 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-17
+- Add conditional BRs to enable ff merge between f14 and f15
+- Remove jackrabbit dependency from pom files
+
+* Fri Dec 10 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-16
+- Fix installation of pom files for artifact jars
+
+* Mon Nov 22 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-15
+- Add apache-commons-parent to BR/R
+- Rename BRs from jakarta-commons to apache-commons
+
+* Thu Nov 11 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-14
+- Remove old depmaps from -depmap.xml file
+- Fix argument quoting for mvn scripts (Resolves rhbz#647945)
+
+* Mon Sep 20 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-13
+- Create dangling symlinks during install (Resolves rhbz#613866)
+
+* Fri Sep 17 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-12
+- Update JPackageRepositoryLayout to handle "signature" packaging
+
+* Mon Sep 13 2010 Yong Yang <yyang@redhat.com> 2.2.1-11
+- Add -P all-models to generate maven model v3
+
+* Wed Sep 1 2010 Alexander Kurtakov <akurtako@redhat.com> 2.2.1-10
+- Remove buildnumber-maven-plugins deps now that is fixed.
+- Use new package names in BR/R.
+- Use global instead of define.
+
+* Fri Aug 27 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-9
+- Remove failing tests after maven-surefire 2.6 update
+
+* Thu Aug 26 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-8
+- Remove incorrect testcase failing with ant 1.8
+- Cleanup whitespace
+
+* Tue Jun 29 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-7
+- Updated previous patch to only modify behaviour in JPP mode
+
+* Mon Jun 28 2010 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.2.1-6
+- Disable parallel artifact resolution
+
+* Wed Jun 23 2010 Yong Yang <yyang@redhat.com> 2.2.1-5
+- Add Requires: maven-enforcer-plugin
+
+* Fri Jun 18 2010 Deepak Bhole <dbhole@redhat.com> 2.2.1-4
+- Final non-bootstrap build against non-bootstrap maven
+
+* Fri Jun 18 2010 Deepak Bhole <dbhole@redhat.com> 2.2.1-3
+- Added buildnumber plugin requirements
+- Rebuild in non-bootstrap
+
+* Thu Jun 17 2010 Deepak Bhole <dbhole@redhat.com> - 0:2.2.1-2
+- Added support for dumping mapping info (in debug mode)
+- Add a custom depmap
+- Added empty-dep
+- Added proper requirements
+- Fixed classworlds jar name used at runtime
+- Install individual components
+- Install poms and mappings
+- Remove non maven items from shaded uber jar
+- Create dependency links in $M2_HOME/lib at install time
+
+* Thu Nov 26 2009 Deepak Bhole <dbhole@redhat.com> - 0:2.2.1-1
+- Initial bootstrap build
