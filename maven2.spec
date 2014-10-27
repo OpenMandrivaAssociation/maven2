@@ -6,7 +6,7 @@
 
 Name:	    maven2
 Version:	2.2.1
-Release:	46.1%{?dist}
+Release:	46.2%{?dist}
 Summary:	Java project management and project comprehension tool
 
 
