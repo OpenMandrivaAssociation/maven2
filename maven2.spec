@@ -7,7 +7,7 @@ Release:	50.4
 Summary:	Java project management and project comprehension tool
 Group:		Development/Java
 License:	ASL 2.0 and MIT and BSD
-URL:		http://maven.apache.org
+URL:		https://maven.apache.org
 
 # export https://svn.apache.org/repos/asf/maven/maven-2/tags/maven-%{version}/ apache-maven-%{version}
 # tar czvf %{name}-%{version}.tar.gz apache-maven-%{version}
